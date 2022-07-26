@@ -9,6 +9,7 @@ namespace WA.Pizza.Core.Models
 {
     public class Basket : ModelBase
     {
+        public int CustomerId { get; set; }
         public ICollection<BasketItem> Items { get; set; }
     }
 }

@@ -15,8 +15,15 @@ namespace WA.Pizza.Infrastructure
         public DbSet<CatalogItem> CatalogItems { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public PizzaContext(DbContextOptions<PizzaContext> options) : base(options) { }
+
+        public async Task SaveChangesAsync(CancellationToken token = default)
+        {
+            await SaveChangesAsync(token);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

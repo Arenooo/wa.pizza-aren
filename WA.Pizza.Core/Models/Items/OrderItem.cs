@@ -12,6 +12,18 @@ namespace WA.Pizza.Core.Models.Items
         //public int CatalogItemId { get; set; }
         public int Quantity { get; set; }
         public CatalogItem CatalogItem { get; set; }
+        public int OrderId { get; set; }
         public Order Order { get; set; }
+
+        public OrderItem() : base() { }
+        public OrderItem(Order order, BasketItem basketItem)
+        {
+            Name = basketItem.Name;
+            Price = basketItem.Price;
+            Quantity = basketItem.Quantity;
+            CatalogItem = basketItem.CatalogItem;
+            OrderId = order.Id;
+            Order = order;
+        }
     }
 }

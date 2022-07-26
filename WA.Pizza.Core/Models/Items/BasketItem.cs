@@ -8,8 +8,8 @@ namespace WA.Pizza.Core.Models.Items
 {
     public class BasketItem : ItemBase
     {
-        //public int BasketId { get; set; }
-        //public int CatalogItemId { get; set; }
+        public int BasketId { get; set; }
+        public int CatalogItemId { get; set; }
         public int Quantity { get; set; }
         public CatalogItem CatalogItem { get; set; }
         public Basket Basket { get; set; }
