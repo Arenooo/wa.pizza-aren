@@ -4,12 +4,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mapster;
 using WA.Pizza.Core.Models;
 using WA.Pizza.Core.Models.Items;
 using WA.Pizza.Core.Exceptions;
+using WA.Pizza.Infrastructure.DTO.Catalog;
 
-namespace WA.Pizza.Infrastructure.Services
+namespace WA.Pizza.Infrastructure.Data.Services
 {
     public class CatalogDataService
     {
@@ -17,20 +18,22 @@ namespace WA.Pizza.Infrastructure.Services
 
         public CatalogDataService(PizzaContext dbContext)
         {
+            MappingConfigurer.Configure();
             _dbContext = dbContext;
         }
 
-        public async Task<int> Create(CatalogItem model)
+        public async Task<int> Create(CreateCatalogItemRequest request)
         {
-            var catalogItem = await _dbContext.CatalogItems.AddAsync(model);
+            var catalogItem = request.Adapt<CatalogItem>();
 
             if (catalogItem == null)
                 throw new WAPizzaFailedToCreateException();
 
+            _dbContext.CatalogItems.Add(catalogItem);
             
             await _dbContext.SaveChangesAsync();
 
-            return catalogItem.Entity.Id;
+            return catalogItem.Id;
         }
 
         public async Task Delete(int id)
@@ -44,31 +47,26 @@ namespace WA.Pizza.Infrastructure.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<CatalogItem> Get(int id)
+        public async Task<CatalogItemDTO> Get(int id)
         {
             var item = await _dbContext.CatalogItems.FirstOrDefaultAsync(m => m.Id == id);
             
             if (item == null)
                 throw new WAPizzaFailedToFindException();
 
-            return item;
+            return item.Adapt<CatalogItemDTO>();
         }
         
-        public async Task<List<CatalogItem>> GetAll() => await _dbContext.CatalogItems.ToListAsync();
+        public async Task<List<CatalogItemDTO>> GetAll() => await _dbContext.CatalogItems.ProjectToType<CatalogItemDTO>().ToListAsync();
 
-        public async Task<int> Update(CatalogItem model)
+        public async Task<int> Update(UpdateCatalogItemRequest request)
         {
-            var item = await _dbContext.CatalogItems.FirstOrDefaultAsync(m => m.Id == model.Id);
+            var item = await _dbContext.CatalogItems.FirstOrDefaultAsync(m => m.Id == request.Id);
 
             if (item == null)
                 throw new WAPizzaFailedToFindException();
 
-            item.Name = model.Name;
-            item.Description = model.Description;
-            item.Price = model.Price;
-            item.Quantity = model.Quantity;
-
-            //catalogItem = _dbContext.CatalogItems.Update(catalogItem).Entity;
+            request.Adapt(item);
 
             await _dbContext.SaveChangesAsync();
 

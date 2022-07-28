@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WA.Pizza.Core.Models;
 using WA.Pizza.Core.Models.Items;
 
-namespace WA.Pizza.Infrastructure
+namespace WA.Pizza.Infrastructure.Data
 {
     public class PizzaContext : DbContext
     {

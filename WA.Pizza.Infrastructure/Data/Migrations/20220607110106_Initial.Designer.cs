@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WA.Pizza.Infrastructure;
+using WA.Pizza.Infrastructure.Data;
 
 #nullable disable
 
-namespace WA.Pizza.Infrastructure.Migrations
+namespace WA.Pizza.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PizzaContext))]
     [Migration("20220607110106_Initial")]

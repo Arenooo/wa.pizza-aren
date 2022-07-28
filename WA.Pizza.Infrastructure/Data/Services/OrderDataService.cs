@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using WA.Pizza.Core.Exceptions;
 using WA.Pizza.Core.Models;
 using WA.Pizza.Core.Models.Items;
+using WA.Pizza.Infrastructure.DTO.Order;
 
-namespace WA.Pizza.Infrastructure.Services
+namespace WA.Pizza.Infrastructure.Data.Services
 {
     public class OrderDataService
     {
@@ -16,6 +18,7 @@ namespace WA.Pizza.Infrastructure.Services
 
         public OrderDataService(PizzaContext dbContext)
         {
+            MappingConfigurer.Configure();
             _dbContext = dbContext;
         }
 
@@ -45,18 +48,9 @@ namespace WA.Pizza.Infrastructure.Services
             {
                 Date = DateTime.Now,
                 Price = basket.Items.Sum(m => m.Price * m.Quantity),
+                Items = basket.Items.Adapt<List<OrderItem>>(),
                 Status = Order.OrderStatus.InProgress,
             };
-
-            foreach (var basketItem in basket.Items)
-            {
-                order.Items.Add(new OrderItem
-                    {
-                        Name = basketItem.CatalogItem.Name,
-                        Quantity = basketItem.CatalogItem.Quantity,
-                        Price = basketItem.CatalogItem.Price
-                    });
-            }
 
             var o = _dbContext.Orders.Add(order);
             await _dbContext.SaveChangesAsync();
@@ -64,14 +58,14 @@ namespace WA.Pizza.Infrastructure.Services
             return o.Entity.Id;
         }
 
-        public async Task<Order> Get(int id)
+        public async Task<OrderDTO> Get(int id)
         {
             var order = await _dbContext.Orders.FirstOrDefaultAsync(m => m.Id == id);
 
             if (order == null)
                 throw new WAPizzaFailedToFindException();
 
-            return order;
+            return order.Adapt<OrderDTO>();
         }
 
         public async Task<List<Order>> GetAll() => await _dbContext.Orders.ToListAsync();

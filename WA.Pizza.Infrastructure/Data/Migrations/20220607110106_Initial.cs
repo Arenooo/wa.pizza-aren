@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WA.Pizza.Infrastructure.Migrations
+namespace WA.Pizza.Infrastructure.Data.Migrations
 {
     public partial class Initial : Migration
     {

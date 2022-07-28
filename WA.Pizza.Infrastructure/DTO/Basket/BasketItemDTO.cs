@@ -1,0 +1,11 @@
+﻿namespace WA.Pizza.Infrastructure.DTO.Basket;
+
+public record BasketItemDTO()
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public int Quantity { get; set; }
+    public int BasketId { get; set; }
+    public int CatalogItemId { get; set; }
+}

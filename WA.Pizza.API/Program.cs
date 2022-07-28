@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WA.Pizza.Infrastructure;
-using WA.Pizza.Infrastructure.Services;
+using WA.Pizza.Infrastructure.Data;
+using WA.Pizza.Infrastructure.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
